@@ -4,6 +4,8 @@
 #include "Resources.h"
 #include <string>
 
+// TODO: Make members private
+// TODO: Magic numbers
 
 enum struct State
 {
@@ -26,6 +28,10 @@ struct PlayerData
 	int score;
 };
 
+// TODO: Two step initialization - add constructor Player(int screenWidth)
+// TODO: Remove Initialize() method
+// TODO: Add const to Render()
+// TODO: Add getters: GetX(), GetY(), GetLives(), IsAlive()
 struct Player
 {
 public:
@@ -47,6 +53,9 @@ public:
 	
 };
 
+// TODO: Add constructor
+// TODO: Add const to Render()
+// TODO: Add getters: IsActive(), Deactivate()
 
 struct Projectile
 {
@@ -66,6 +75,11 @@ public:
 	void Render(Texture2D texture);
 };
 
+// TODO: Add defaults or constructor
+// TODO: Check if 'rec' and 'color' are used, delete if not
+// TODO: position and active uninitialized
+// TODO: Add const to Render()
+// TODO: Add getters: IsActive(), GetHealth()
 struct Wall 
 {
 public: 
@@ -81,6 +95,12 @@ public:
 	void Update(); 
 };
 
+// TODO: Delete x and y (use position instead)
+// TODO: Check if 'color' is used - delete if not
+// TODO: Make moveRight and active private
+// TODO: Add const to Render()
+// TODO: Add parameter to Update(int screenWidth)
+// TODO: Add getters: IsActive(), GetY(), GetPosition()
 struct Alien
 {
 public:
@@ -112,6 +132,7 @@ struct Star
 	void Render();
 };
 
+//TODO: similiar as before
 struct Background
 {
 	
@@ -124,6 +145,16 @@ struct Background
 
 };
 
+// TODO: Score uninitialized, Add = 0
+// TODO: GameState uninitialized
+// TODO: 'rec' is unused
+// TODO: PlayerPos, alienPos, cornerPos, offset only used in Update() - make local
+// TODO: C-style array 'name' - use std::string instead
+// TODO: Break Update() into smaller functions
+// TODO: Pass string by const reference: InsertNewHighScore(const std::string& name)
+// TODO: Add const to CheckCollision()
+// TODO: LoadLeaderboard() is empty
+// TODO: SaveLeaderboard() is incomplete
 struct Game
 {
 	// Gamestate

@@ -2,10 +2,11 @@
 #include "raylib.h"
 #include "vector"
 
+// TODO: No destructor - memory leak! Add ~Resources() and Rule of 5
+// TODO: Make members private
 struct Resources 
 {
 	void Load();
-	//void Unload();
 
 	std::vector<Texture2D> shipTextures;
 	Texture2D alienTexture;
