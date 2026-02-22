@@ -25,7 +25,7 @@ enum struct EntityType
 struct PlayerData
 {
 	std::string name;
-	int score;
+	int score = 0;
 };
 
 // TODO: Two step initialization - add constructor Player(int screenWidth)
@@ -77,16 +77,15 @@ public:
 
 // TODO: Add defaults or constructor
 // TODO: Check if 'rec' and 'color' are used, delete if not
-// TODO: position and active uninitialized
 // TODO: Add const to Render()
 // TODO: Add getters: IsActive(), GetHealth()
 struct Wall 
 {
 public: 
-	Vector2 position; 
-	Rectangle rec; 
-	bool active; 
-	Color color; 
+	Vector2 position = { 0, 0 };
+	Rectangle rec{}; 
+	bool active = true; 
+	Color color{};
 	int health = 50;
 	int radius = 60;
 
@@ -145,8 +144,6 @@ struct Background
 
 };
 
-// TODO: Score uninitialized, Add = 0
-// TODO: GameState uninitialized
 // TODO: 'rec' is unused
 // TODO: PlayerPos, alienPos, cornerPos, offset only used in Update() - make local
 // TODO: C-style array 'name' - use std::string instead
@@ -158,10 +155,10 @@ struct Background
 struct Game
 {
 	// Gamestate
-	State gameState = {};
+	State gameState = State::STARTSCREEN;
 
 	// Score
-	int score;
+	int score = 0;
 
 	// for later, make a file where you can adjust the number of walls (config file) 
 	int wallCount = 5;
