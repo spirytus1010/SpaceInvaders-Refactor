@@ -13,6 +13,19 @@ void Resources::Load()
 	shipTextures.push_back(LoadTexture("./Assets/Ship3.png"));
 	laserTexture = LoadTexture("./Assets/Laser.png");
 }
+
+Resources::~Resources()
+{
+    for (auto& texture : shipTextures)
+    {
+        UnloadTexture(texture);
+    }
+
+    UnloadTexture(alienTexture);
+    UnloadTexture(barrierTexture);
+    UnloadTexture(laserTexture);
+}
+
 /*
 void Resources::Unload()
 {
