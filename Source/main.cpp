@@ -40,8 +40,7 @@ int main(void)
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 
     Game game = { State::STARTSCREEN };
-    Resources resources;
-    game.resources = resources;
+
     game.Launch();
 
     
