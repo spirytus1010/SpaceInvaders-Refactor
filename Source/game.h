@@ -7,6 +7,20 @@
 // TODO: Make members private
 // TODO: Magic numbers
 
+// Formation layout
+constexpr int FORMATION_WIDTH = 8;
+constexpr int FORMATION_HEIGHT = 5;
+constexpr int ALIEN_SPACING = 80;
+constexpr int FORMATION_START_X = 100;
+constexpr int FORMATION_START_Y = 50;
+
+// Shooting timing 
+constexpr int FRAMES_PER_ALIEN_SHOT = 59;  // ~1 second at 60 FPS
+
+// Background
+constexpr int STAR_COUNT = 600;
+constexpr float BACKGROUND_SCROLL_DIVISOR = 15.0f;
+
 enum struct State
 {
 	STARTSCREEN,
@@ -34,13 +48,18 @@ struct PlayerData
 // TODO: Add getters: GetX(), GetY(), GetLives(), IsAlive()
 struct Player
 {
-public:
+	static constexpr float DEFAULT_SPEED = 7.0f;
+	static constexpr float BASE_HEIGHT = 70.0f;
+	static constexpr float DEFAULT_RADIUS = 50.0f;
+	static constexpr int INITIAL_LIVES = 3;
+	static constexpr float ANIMATION_INTERVAL = 0.4f;
+	static constexpr int MAX_TEXTURE_INDEX = 2;
 
 	float x_pos = 0;
-	float speed = 7;
-	float player_base_height = 70.0f;  
-	float radius = 50;
-	int lives = 3;
+	float speed = DEFAULT_SPEED;                  
+	float player_base_height = BASE_HEIGHT;      
+	float radius = DEFAULT_RADIUS;                
+	int lives = INITIAL_LIVES;                    
 	int direction = 0;
 	int activeTexture = 0;
 	float timer = 0;
@@ -59,11 +78,13 @@ public:
 
 struct Projectile
 {
-public: 
+	static constexpr int DEFAULT_SPEED = 15;
+	static constexpr float HALF_LENGTH = 15.0f;
+
 	// INITIALIZE PROJECTILE WHILE DEFINING IF ITS PLAYER OR ENEMY 
-	Vector2 position = {0,0};
-	int speed = 15; 
-	bool active = true;  
+	Vector2 position = { 0,0 };
+	int speed = DEFAULT_SPEED;
+	bool active = true;
 	EntityType type = {};
 
 	// LINE WILL UPDATE WITH POSITION FOR CALCULATIONS
@@ -71,7 +92,6 @@ public:
 	Vector2 lineEnd = { 0, 0 };
 
 	void Update();
-
 	void Render(Texture2D texture);
 };
 
@@ -81,17 +101,19 @@ public:
 // TODO: Add getters: IsActive(), GetHealth()
 struct Wall 
 {
-public: 
+	static constexpr float Y_OFFSET = 250.0f;
+	static constexpr int INITIAL_HEALTH = 50;
+	static constexpr int DEFAULT_RADIUS = 60;
+
 	Vector2 position = { 0, 0 };
-	Rectangle rec{}; 
-	bool active = true; 
+	Rectangle rec{};
+	bool active = true;
 	Color color{};
-	int health = 50;
-	int radius = 60;
+	int health = INITIAL_HEALTH;                  
+	int radius = DEFAULT_RADIUS;          
 
-
-	void Render(Texture2D texture); 
-	void Update(); 
+	void Render(Texture2D texture);
+	void Update();
 };
 
 // TODO: Delete x and y (use position instead)
@@ -102,22 +124,25 @@ public:
 // TODO: Add getters: IsActive(), GetY(), GetPosition()
 struct Alien
 {
-public:
-	
-	Color color = WHITE; 
-	Vector2 position = {0, 0};
-	int x = 0; 
-	int y = 0; 
-	float radius = 30;
-	bool active = true;  
-	bool moveRight = true; 
-	
-	EntityType type = EntityType::ENEMY; 
+	static constexpr float DEFAULT_SPEED = 2.0f;
+	static constexpr float DEFAULT_RADIUS = 30.0f;
+	static constexpr float DESCENT_AMOUNT = 50.0f;
+	static constexpr int POINTS = 100;
 
-	int speed = 2; 
-		 
-	void Update(); 
-	void Render(Texture2D texture); 
+	Color color = WHITE;
+	Vector2 position = { 0, 0 };
+	int x = 0;
+	int y = 0;
+	float radius = DEFAULT_RADIUS;
+	bool active = true;
+	bool moveRight = true;
+
+	EntityType type = EntityType::ENEMY;
+
+	int speed = DEFAULT_SPEED;
+
+	void Update();
+	void Render(Texture2D texture);
 };
 
 
@@ -169,11 +194,11 @@ struct Game
 	//Aliens stuff? (idk cause liv wrote this)
 	Rectangle rec = { 0, 0 ,0 ,0 }; 
 
-	int formationWidth = 8;
-	int formationHeight = 5;
-	int alienSpacing = 80;
-	int formationX = 100;
-	int formationY = 50;
+	int formationWidth = FORMATION_WIDTH;
+	int formationHeight = FORMATION_HEIGHT;
+	int alienSpacing = ALIEN_SPACING;
+	int formationX = FORMATION_START_X; 
+	int formationY = FORMATION_START_Y;
 
 	bool newHighScore = false;
 	
