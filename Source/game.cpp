@@ -54,9 +54,7 @@ void Game::Start()
 
 
 	//creating player
-	Player newPlayer;
-	player = newPlayer;
-	player.Initialize();
+	player = Player(GetScreenWidth());
 
 	//creating aliens
 	SpawnAliens();
@@ -659,13 +657,20 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 // TODO: Implement frame-independent movement using deltaTime
 // TODO: Add const to all Render() functions
 // TODO: Use IsActive(), TakeDamage() instead of direct access
-void Player::Initialize() 
+Player::Player(int screenWidth)
+	: x_pos(screenWidth / 2.0f)
+	, speed(DEFAULT_SPEED)
+	, player_base_height(BASE_HEIGHT)
+	, radius(DEFAULT_RADIUS)
+	, lives(INITIAL_LIVES)
+	, direction(0)
+	, activeTexture(0)
+	, timer(0.0f)
+	, type(EntityType::PLAYER)
 {
-	
-	float window_width = (float)GetScreenWidth();
-	x_pos = window_width / 2;
-	std::cout<< "Find Player -X:" << GetScreenWidth() / 2 << "Find Player -Y" << GetScreenHeight() - player_base_height << std::endl;
-
+	std::cout << "Player created at X:" << x_pos
+		<< " Y:" << GetScreenHeight() - player_base_height
+		<< std::endl;
 }
 
 void Player::Update() 

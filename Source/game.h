@@ -5,7 +5,6 @@
 #include <string>
 
 // TODO: Make members private
-// TODO: Magic numbers
 
 // Formation layout
 constexpr int FORMATION_WIDTH = 8;
@@ -42,8 +41,6 @@ struct PlayerData
 	int score = 0;
 };
 
-// TODO: Two step initialization - add constructor Player(int screenWidth)
-// TODO: Remove Initialize() method
 // TODO: Add const to Render()
 // TODO: Add getters: GetX(), GetY(), GetLives(), IsAlive()
 struct Player
@@ -66,7 +63,8 @@ struct Player
 
 	EntityType type = EntityType::PLAYER;
 
-	void Initialize();
+	Player() = default;
+	explicit Player(int screenWidth);
 	void Render(Texture2D texture);
 	void Update();
 	
@@ -96,7 +94,6 @@ struct Projectile
 };
 
 // TODO: Add defaults or constructor
-// TODO: Check if 'rec' and 'color' are used, delete if not
 // TODO: Add const to Render()
 // TODO: Add getters: IsActive(), GetHealth()
 struct Wall 
@@ -114,7 +111,6 @@ struct Wall
 	void Update();
 };
 
-// TODO: Delete x and y (use position instead)
 // TODO: Check if 'color' is used - delete if not
 // TODO: Make moveRight and active private
 // TODO: Add const to Render()
@@ -165,8 +161,6 @@ struct Background
 
 };
 
-// TODO: 'rec' is unused
-// TODO: PlayerPos, alienPos, cornerPos, offset only used in Update() - make local
 // TODO: C-style array 'name' - use std::string instead
 // TODO: Break Update() into smaller functions
 // TODO: Pass string by const reference: InsertNewHighScore(const std::string& name)
