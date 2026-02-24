@@ -104,6 +104,11 @@ void Game::Launch()
 // TODO: Extract complex text input logic to separate function
 void Game::Update()
 {
+	Vector2 playerPos;
+	Vector2 alienPos;
+	Vector2 cornerPos;
+	float offset;
+
 	switch (gameState)
 	{
 	case State::STARTSCREEN:
@@ -498,12 +503,13 @@ void Game::Render()
 
 void Game::SpawnAliens()
 {
-	for (int row = 0; row < formationHeight; row++) {
-		for (int col = 0; col < formationWidth; col++) {
+	for (int row = 0; row < FORMATION_HEIGHT; row++) {
+		for (int col = 0; col < FORMATION_WIDTH; col++) {
 			Alien newAlien = Alien();
 			newAlien.active = true;
-			newAlien.position.x = formationX + 450 + (col * alienSpacing);
-			newAlien.position.y = formationY + (row * alienSpacing);
+			newAlien.position.x = FORMATION_START_X + 450 + (col * ALIEN_SPACING);
+			newAlien.position.y = FORMATION_START_Y
+				+ (row * ALIEN_SPACING);
 			Aliens.push_back(newAlien);
 			std::cout << "Find Alien -X:" << newAlien.position.x << std::endl;
 			std::cout << "Find Alien -Y:" << newAlien.position.y << std::endl;

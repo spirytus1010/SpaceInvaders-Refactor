@@ -106,9 +106,7 @@ struct Wall
 	static constexpr int DEFAULT_RADIUS = 60;
 
 	Vector2 position = { 0, 0 };
-	Rectangle rec{};
 	bool active = true;
-	Color color{};
 	int health = INITIAL_HEALTH;                  
 	int radius = DEFAULT_RADIUS;          
 
@@ -131,8 +129,6 @@ struct Alien
 
 	Color color = WHITE;
 	Vector2 position = { 0, 0 };
-	int x = 0;
-	int y = 0;
 	float radius = DEFAULT_RADIUS;
 	bool active = true;
 	bool moveRight = true;
@@ -191,15 +187,6 @@ struct Game
 	//Aliens shooting
 	float shootTimer = 0;
 
-	//Aliens stuff? (idk cause liv wrote this)
-	Rectangle rec = { 0, 0 ,0 ,0 }; 
-
-	int formationWidth = FORMATION_WIDTH;
-	int formationHeight = FORMATION_HEIGHT;
-	int alienSpacing = ALIEN_SPACING;
-	int formationX = FORMATION_START_X; 
-	int formationY = FORMATION_START_Y;
-
 	bool newHighScore = false;
 	
 
@@ -238,15 +225,6 @@ struct Game
 	std::vector<PlayerData> Leaderboard = { {"Player 1", 500}, {"Player 2", 400}, {"Player 3", 300}, {"Player 4", 200}, {"Player 5", 100} };
 	
 	Background background;
-
-
-
-	Vector2 playerPos;
-	Vector2 alienPos; 
-	Vector2 cornerPos;
-	float offset;
-
-
 
 	//TEXTBOX ENTER
 	char name[9 + 1] = "\0";      //One extra space required for null terminator char '\0'
