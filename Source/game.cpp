@@ -103,7 +103,6 @@ void Game::Launch()
 void Game::Update()
 {
 	Vector2 playerPos;
-	Vector2 alienPos;
 	Vector2 cornerPos;
 	float offset;
 
@@ -571,7 +570,7 @@ void Game::SaveLeaderboard()
 	// CLOSE FILE
 }
 
-bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)
+bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)  const
 {
 	// our objective is to calculate the distance between the closest point on the line to the centre of the circle, 
 	// and determine if it is shorter than the radius.
@@ -617,16 +616,7 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 
 		float closeToCentre = lineLength(A, { closestX, closestY }); //closestX + Y compared to circle centre
 
-		if (closeToCentre < circleRadius)
-		{
-			//Line is colliding with circle!
-			return true;
-		}
-		else
-		{
-			//Line is not colliding
-			return false;
-		}
+		return closeToCentre < circleRadius;
 	}
 	else
 	{
