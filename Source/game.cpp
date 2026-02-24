@@ -689,14 +689,13 @@ void Player::Update()
 
 
 	//Determine frame for animation
-	timer += GetFrameTime();
-
-	if (timer > 0.4 && activeTexture == 2)
+	if (timer > Player::ANIMATION_INTERVAL &&
+		activeTexture == Player::MAX_TEXTURE_INDEX)
 	{
 		activeTexture = 0;
 		timer = 0;
 	}
-	else if (timer > 0.4)
+	else if (timer > Player::ANIMATION_INTERVAL)
 	{
 		activeTexture++;
 		timer = 0;
