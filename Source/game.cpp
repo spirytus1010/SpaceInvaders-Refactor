@@ -129,12 +129,10 @@ void Game::Update()
 		player.Update();
 		
 		//Update Aliens and Check if they are past player
-		for (int i = 0; i < Aliens.size(); i++)
-		{
-			Aliens[i].Update(); 
+		for (auto& alien : Aliens) {
+			alien.Update();
 
-			if (Aliens[i].position.y > GetScreenHeight() - player.player_base_height)
-			{
+			if (alien.position.y > GetScreenHeight() - player.player_base_height) {
 				End();
 			}
 		}
@@ -160,14 +158,12 @@ void Game::Update()
 
 
 		//UPDATE PROJECTILE
-		for (int i = 0; i < Projectiles.size(); i++)
-		{
-			Projectiles[i].Update();
+		for (auto& projectile : Projectiles) {
+			projectile.Update();
 		}
 		//UPDATE PROJECTILE
-		for (int i = 0; i < Walls.size(); i++)
-		{
-			Walls[i].Update();
+		for (auto& wall : Walls) {
+			wall.Update();
 		}
 
 		//CHECK ALL COLLISONS HERE
@@ -372,21 +368,18 @@ void Game::Render()
 		player.Render(resources.shipTextures[player.activeTexture]);
 
 		//projectile rendering
-		for (int i = 0; i < Projectiles.size(); i++)
-		{
-			Projectiles[i].Render(resources.laserTexture);
+		for (auto& projectile : Projectiles) {
+			projectile.Render(resources.laserTexture);
 		}
 
 		// wall rendering 
-		for (int i = 0; i < Walls.size(); i++)
-		{
-			Walls[i].Render(resources.barrierTexture); 
+		for (auto& wall : Walls) {
+			wall.Render(resources.barrierTexture);
 		}
 
 		//alien rendering  
-		for (int i = 0; i < Aliens.size(); i++)
-		{
-			Aliens[i].Render(resources.alienTexture);
+		for (auto& alien : Aliens) {
+			alien.Render(resources.alienTexture);
 		}
 
 
@@ -870,18 +863,16 @@ void Background::Initialize(int starAmount)
 
 void Background::Update(float offset)
 {
-	for (int i = 0; i < Stars.size(); i++)
-	{
-		Stars[i].Update(offset);
+	for (auto& star : Stars) {
+		star.Update(offset);
 	}
 	
 }
 
 void Background::Render()
 {
-	for (int i = 0; i < Stars.size(); i++)
-	{
-		Stars[i].Render();
+	for (auto& star : Stars) {
+		star.Render();
 	}
 }
 
