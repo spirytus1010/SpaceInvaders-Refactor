@@ -253,22 +253,12 @@ void Game::Update()
 		std::erase_if(Projectiles, [](const Projectile& p) {
 			return !p.active;
 			});
-		for (int i = 0; i < Aliens.size(); i++)
-		{
-			if (Aliens[i].active == false)
-			{
-				Aliens.erase(Aliens.begin() + i);
-				i--;
-			}
-		}
-		for (int i = 0; i < Walls.size(); i++)
-		{
-			if (Walls[i].active == false)
-			{
-				Walls.erase(Walls.begin() + i);
-				i--;
-			}
-		}
+		std::erase_if(Aliens, [](const Alien& a) {
+			return !a.active;
+			});
+		std::erase_if(Walls, [](const Wall& w) {
+			return !w.active;
+			});
 
 			
 		
