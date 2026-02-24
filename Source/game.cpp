@@ -45,7 +45,7 @@ void Game::Start()
 	for (int i = 0; i < wallCount; i++)
 	{
 		Wall newWalls;
-		newWalls.position.y = window_height - 250; 
+		newWalls.position.y = window_height - Wall::Y_OFFSET;
 		newWalls.position.x = wall_distance * (i + 1); 
 
 		Walls.push_back(newWalls); 
@@ -184,7 +184,7 @@ void Game::Update()
 						// Set them as inactive, will be killed later
 						Projectiles[i].active = false;
 						Aliens[a].active = false;
-						score += 100;
+						score += Alien::POINTS;
 					}
 				}
 			}
@@ -223,14 +223,14 @@ void Game::Update()
 			float window_height = (float)GetScreenHeight();
 			Projectile newProjectile;
 			newProjectile.position.x = player.x_pos;
-			newProjectile.position.y = window_height - 130;
+			newProjectile.position.y = window_height - player.player_base_height - Projectile::SPAWN_OFFSET;
 			newProjectile.type = EntityType::PLAYER_PROJECTILE;
 			Projectiles.push_back(newProjectile);
 		}
 
 		//Aliens Shooting
 		shootTimer += 1;
-		if (shootTimer > 59) //once per second
+		if (shootTimer > FRAMES_PER_ALIEN_SHOT)
 		{
 			int randomAlienIndex = 0;
 
@@ -793,7 +793,7 @@ void Alien::Update()
 		if (position.x >= GetScreenWidth())
 		{
 			moveRight = false; 
-			position.y += 50; 
+			position.y += DESCENT_AMOUNT;
 		}
 	}
 	else 
@@ -803,7 +803,7 @@ void Alien::Update()
 		if (position.x <= 0)
 		{
 			moveRight = true; 
-			position.y += 50; 
+			position.y += DESCENT_AMOUNT;
 		}
 	}
 }

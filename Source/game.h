@@ -78,6 +78,7 @@ struct Projectile
 {
 	static constexpr int DEFAULT_SPEED = 15;
 	static constexpr float HALF_LENGTH = 15.0f;
+	static constexpr float SPAWN_OFFSET = 60.0f;
 
 	// INITIALIZE PROJECTILE WHILE DEFINING IF ITS PLAYER OR ENEMY 
 	Vector2 position = { 0,0 };
