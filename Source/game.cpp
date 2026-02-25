@@ -44,12 +44,10 @@ void Game::Start()
 	float wall_distance = window_width / (wallCount + 1); 
 	for (int i = 0; i < wallCount; i++)
 	{
-		Wall newWalls;
-		newWalls.position.y = window_height - Wall::Y_OFFSET;
-		newWalls.position.x = wall_distance * (i + 1); 
+		float x = wall_distance * (i + 1);
+		float y = window_height - Wall::Y_OFFSET;
 
-		Walls.push_back(newWalls); 
-
+		Walls.emplace_back(Vector2{ x, y }, Wall::DEFAULT_RADIUS);
 	}
 
 
@@ -61,9 +59,7 @@ void Game::Start()
 	
 
 	//creating background
-	Background newBackground;
-	newBackground.Initialize(600);
-	background = newBackground;
+	background = Background(600);
 
 	//reset score
 	score = 0;
@@ -741,6 +737,14 @@ void Projectile::Render(Texture2D texture) const
 		WHITE);
 }
 
+Wall::Wall(Vector2 pos, int rad)
+	: position(pos)
+	, radius(rad)
+	, active(true)
+	, health(INITIAL_HEALTH)
+{
+}
+
 void Wall::Render(Texture2D texture) const
 {
 	DrawTexturePro(texture,
@@ -842,23 +846,16 @@ void Star::Render() const
 	DrawCircle((int)position.x, (int)position.y, size, color);
 }
 
-
-void Background::Initialize(int starAmount)
-{
-	for (int i = 0; i < starAmount; i++)
-	{
+Background::Background(int starAmount) {
+	for (int i = 0; i < starAmount; i++) {
 		Star newStar;
-
 		newStar.initPosition.x = GetRandomValue(-150, GetScreenWidth() + 150);
 		newStar.initPosition.y = GetRandomValue(0, GetScreenHeight());
-		
+
 		//random color?
 		newStar.color = SKYBLUE;
-
 		newStar.size = GetRandomValue(1, 4) / 2;
-
 		Stars.push_back(newStar);
-
 	}
 }
 

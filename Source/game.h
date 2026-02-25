@@ -106,7 +106,10 @@ struct Wall
 	Vector2 position = { 0, 0 };
 	bool active = true;
 	int health = INITIAL_HEALTH;                  
-	int radius = DEFAULT_RADIUS;          
+	int radius = DEFAULT_RADIUS;
+
+	Wall() = default;
+	Wall(Vector2 pos, int rad);
 
 	void Render(Texture2D texture) const;
 	void Update();
@@ -152,11 +155,11 @@ struct Star
 //TODO: similiar as before
 struct Background
 {
-	
-
 	std::vector<Star> Stars;
 
-	void Initialize(int starAmount);
+	Background() = default;
+	explicit Background(int starAmount);
+
 	void Update(float offset);
 	void Render() const;
 };
