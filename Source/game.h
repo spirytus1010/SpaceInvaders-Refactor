@@ -65,7 +65,7 @@ struct Player
 
 	Player() = default;
 	explicit Player(int screenWidth);
-	void Render(Texture2D texture);
+	void Render(Texture2D texture) const;
 	void Update();
 	
 };
@@ -91,7 +91,7 @@ struct Projectile
 	Vector2 lineEnd = { 0, 0 };
 
 	void Update();
-	void Render(Texture2D texture);
+	void Render(Texture2D texture) const;
 };
 
 // TODO: Add defaults or constructor
@@ -108,7 +108,7 @@ struct Wall
 	int health = INITIAL_HEALTH;                  
 	int radius = DEFAULT_RADIUS;          
 
-	void Render(Texture2D texture);
+	void Render(Texture2D texture) const;
 	void Update();
 };
 
@@ -135,7 +135,7 @@ struct Alien
 	int speed = DEFAULT_SPEED;
 
 	void Update();
-	void Render(Texture2D texture);
+	void Render(Texture2D texture) const;
 };
 
 
@@ -146,7 +146,7 @@ struct Star
 	Color color = GRAY;
 	float size = 0;
 	void Update(float starOffset);
-	void Render();
+	void Render() const;
 };
 
 //TODO: similiar as before
@@ -158,8 +158,7 @@ struct Background
 
 	void Initialize(int starAmount);
 	void Update(float offset);
-	void Render();
-
+	void Render() const;
 };
 
 // TODO: C-style array 'name' - use std::string instead
@@ -200,7 +199,7 @@ struct Game
 
 	bool CheckNewHighScore();
 
-	void InsertNewHighScore(std::string name);
+	void InsertNewHighScore(const std::string& name);
 
 	void LoadLeaderboard();
 	void SaveLeaderboard();

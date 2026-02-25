@@ -501,7 +501,7 @@ bool Game::CheckNewHighScore()
 	return false;
 }
 
-void Game::InsertNewHighScore(std::string name)
+void Game::InsertNewHighScore(const std::string& name)
 {
 	PlayerData newData;
 	newData.name = name;
@@ -681,7 +681,7 @@ void Player::Update()
 	
 }
 
-void Player::Render(Texture2D texture) 
+void Player::Render(Texture2D texture) const
 {
 	float window_height = GetScreenHeight(); 
 
@@ -720,7 +720,7 @@ void Projectile::Update()
 	}
 }
 
-void Projectile::Render(Texture2D texture)
+void Projectile::Render(Texture2D texture) const
 {
 	//DrawCircle((int)position.x, (int)position.y, 10, RED);
 	DrawTexturePro(texture,
@@ -740,7 +740,7 @@ void Projectile::Render(Texture2D texture)
 		WHITE);
 }
 
-void Wall::Render(Texture2D texture)
+void Wall::Render(Texture2D texture) const
 {
 	DrawTexturePro(texture,
 		{
@@ -801,7 +801,7 @@ void Alien::Update()
 	}
 }
 
-void Alien::Render(Texture2D texture) 
+void Alien::Render(Texture2D texture) const
 {
 	//DrawRectangle((int)position.x - 25, (int)position.y, 30, 30, RED);
 	//DrawCircle((int)position.x, (int)position.y, radius, GREEN);
@@ -836,7 +836,7 @@ void Star::Update(float starOffset)
 
 }
 
-void Star::Render()
+void Star::Render() const
 {
 	DrawCircle((int)position.x, (int)position.y, size, color);
 }
@@ -869,7 +869,7 @@ void Background::Update(float offset)
 	
 }
 
-void Background::Render()
+void Background::Render() const
 {
 	for (auto& star : Stars) {
 		star.Render();
