@@ -65,8 +65,8 @@ struct Player
 
 	Player() = default;
 	explicit Player(int screenWidth);
-	void Render(Texture2D texture) const;
-	void Update();
+	void Render(Texture2D texture) const noexcept;
+	void Update() noexcept;
 	
 };
 
@@ -90,8 +90,8 @@ struct Projectile
 	Vector2 lineStart = { 0, 0 };
 	Vector2 lineEnd = { 0, 0 };
 
-	void Update();
-	void Render(Texture2D texture) const;
+	void Update() noexcept;
+	void Render(Texture2D texture) const noexcept;
 };
 
 // TODO: Add defaults or constructor
@@ -111,8 +111,8 @@ struct Wall
 	Wall() = default;
 	Wall(Vector2 pos, int rad);
 
-	void Render(Texture2D texture) const;
-	void Update();
+	void Render(Texture2D texture) const noexcept;
+	void Update() noexcept;
 };
 
 // TODO: Check if 'color' is used - delete if not
@@ -137,8 +137,8 @@ struct Alien
 
 	int speed = DEFAULT_SPEED;
 
-	void Update();
-	void Render(Texture2D texture) const;
+	void Update() noexcept;
+	void Render(Texture2D texture) const noexcept;
 };
 
 
@@ -148,8 +148,8 @@ struct Star
 	Vector2 position = { 0, 0 };
 	Color color = GRAY;
 	float size = 0;
-	void Update(float starOffset);
-	void Render() const;
+	void Update(float starOffset) noexcept;
+	void Render() const noexcept;
 };
 
 //TODO: similiar as before
@@ -160,8 +160,8 @@ struct Background
 	Background() = default;
 	explicit Background(int starAmount);
 
-	void Update(float offset);
-	void Render() const;
+	void Update(float offset) noexcept;
+	void Render() const noexcept;
 };
 
 // TODO: C-style array 'name' - use std::string instead
@@ -194,11 +194,11 @@ struct Game
 	void Launch();
 
 	void Update();
-	void Render();
+	void Render() const noexcept;
 
 	void SpawnAliens();
 
-	bool CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd) const;
+	bool CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd) const noexcept;
 
 	bool CheckNewHighScore();
 

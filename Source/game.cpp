@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <algorithm>
 
 // TODO: Magic number
 // TODO: Delete unused includes <chrono> and <thread>
@@ -127,10 +128,13 @@ void Game::Update()
 		//Update Aliens and Check if they are past player
 		for (auto& alien : Aliens) {
 			alien.Update();
+		}
 
-			if (alien.position.y > GetScreenHeight() - player.player_base_height) {
-				End();
-			}
+		if (std::any_of(Aliens.begin(), Aliens.end(),
+			[this](const Alien& alien) {
+				return alien.position.y > GetScreenHeight() - player.player_base_height;
+			})) {
+			End();
 		}
 
 		//End game if player dies
@@ -338,7 +342,7 @@ void Game::Update()
 
 // TODO: Maybe break into RenderStartScreen(), RenderGameplay(), etc.
 // TODO: Add const correctness and use range-for loops
-void Game::Render()
+void Game::Render() const noexcept
 {
 	switch (gameState)
 	{
@@ -455,8 +459,7 @@ void Game::Render()
 
 			for (int i = 0; i < Leaderboard.size(); i++)
 			{
-				char* tempNameDisplay = Leaderboard[i].name.data();
-				DrawText(tempNameDisplay, 50, 140 + (i * 40), 40, YELLOW);
+				DrawText(Leaderboard[i].name.c_str(), 50, 140 + (i * 40), 40, YELLOW);
 				DrawText(TextFormat("%i", Leaderboard[i].score), 350, 140 + (i * 40), 40, YELLOW);
 			}
 		}
@@ -504,18 +507,14 @@ void Game::InsertNewHighScore(const std::string& name)
 	newData.name = name;
 	newData.score = score;
 
-	for (int i = 0; i < Leaderboard.size(); i++)
-	{
-		if (newData.score > Leaderboard[i].score)
-		{
+	auto it = std::find_if(Leaderboard.begin(), Leaderboard.end(),
+		[&newData](const PlayerData& entry) {
+			return newData.score > entry.score;
+		});
 
-			Leaderboard.insert(Leaderboard.begin() + i, newData);
-
-			Leaderboard.pop_back();
-
-			i = Leaderboard.size();
-
-		}
+	if (it != Leaderboard.end()) {
+		Leaderboard.insert(it, newData);
+		Leaderboard.pop_back();
 	}
 }
 
@@ -560,7 +559,7 @@ void Game::SaveLeaderboard()
 	// CLOSE FILE
 }
 
-bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)  const
+bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)  const noexcept
 {
 	// our objective is to calculate the distance between the closest point on the line to the centre of the circle, 
 	// and determine if it is shorter than the radius.
@@ -636,7 +635,7 @@ Player::Player(int screenWidth)
 		<< std::endl;
 }
 
-void Player::Update() 
+void Player::Update() noexcept
 {
 
 	//Movement
@@ -678,7 +677,7 @@ void Player::Update()
 	
 }
 
-void Player::Render(Texture2D texture) const
+void Player::Render(Texture2D texture) const noexcept
 {
 	float window_height = GetScreenHeight(); 
 
@@ -700,7 +699,7 @@ void Player::Render(Texture2D texture) const
 
 
 
-void Projectile::Update()
+void Projectile::Update() noexcept
 {
 	position.y -= speed;
 
@@ -717,7 +716,7 @@ void Projectile::Update()
 	}
 }
 
-void Projectile::Render(Texture2D texture) const
+void Projectile::Render(Texture2D texture) const noexcept
 {
 	//DrawCircle((int)position.x, (int)position.y, 10, RED);
 	DrawTexturePro(texture,
@@ -745,7 +744,7 @@ Wall::Wall(Vector2 pos, int rad)
 {
 }
 
-void Wall::Render(Texture2D texture) const
+void Wall::Render(Texture2D texture) const noexcept
 {
 	DrawTexturePro(texture,
 		{
@@ -768,7 +767,7 @@ void Wall::Render(Texture2D texture) const
 	
 }
 
-void Wall::Update() 
+void Wall::Update() noexcept
 {
 
 	// set walls as inactive when out of health
@@ -780,7 +779,7 @@ void Wall::Update()
 
 }
 
-void Alien::Update() 
+void Alien::Update() noexcept
 {
 	int window_width = GetScreenWidth(); 
 
@@ -806,7 +805,7 @@ void Alien::Update()
 	}
 }
 
-void Alien::Render(Texture2D texture) const
+void Alien::Render(Texture2D texture) const noexcept
 {
 	//DrawRectangle((int)position.x - 25, (int)position.y, 30, 30, RED);
 	//DrawCircle((int)position.x, (int)position.y, radius, GREEN);
@@ -834,14 +833,14 @@ void Alien::Render(Texture2D texture) const
 // TODO: Fix inconsistent color comments
 
 //BACKGROUND
-void Star::Update(float starOffset)
+void Star::Update(float starOffset) noexcept
 {
 	position.x = initPosition.x + starOffset;
 	position.y = initPosition.y;
 
 }
 
-void Star::Render() const
+void Star::Render() const noexcept
 {
 	DrawCircle((int)position.x, (int)position.y, size, color);
 }
@@ -859,7 +858,7 @@ Background::Background(int starAmount) {
 	}
 }
 
-void Background::Update(float offset)
+void Background::Update(float offset) noexcept
 {
 	for (auto& star : Stars) {
 		star.Update(offset);
@@ -867,7 +866,7 @@ void Background::Update(float offset)
 	
 }
 
-void Background::Render() const
+void Background::Render() const noexcept
 {
 	for (auto& star : Stars) {
 		star.Render();
