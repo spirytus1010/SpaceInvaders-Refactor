@@ -223,9 +223,7 @@ struct Game
 	
 	Background background;
 
-	//TEXTBOX ENTER
-	char name[9 + 1] = "\0";      //One extra space required for null terminator char '\0'
-	int letterCount = 0;
+	std::string name;
 
 	Rectangle textBox = { 600, 500, 225, 50 };
 	bool mouseOnText = false;
