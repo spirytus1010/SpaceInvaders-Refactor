@@ -41,8 +41,6 @@ struct PlayerData
 	int score = 0;
 };
 
-// TODO: Add const to Render()
-// TODO: Add getters: GetX(), GetY(), GetLives(), IsAlive()
 struct Player
 {
 	static constexpr float DEFAULT_SPEED = 7.0f;
@@ -70,10 +68,6 @@ struct Player
 	
 };
 
-// TODO: Add constructor
-// TODO: Add const to Render()
-// TODO: Add getters: IsActive(), Deactivate()
-
 struct Projectile
 {
 	static constexpr int DEFAULT_SPEED = 15;
@@ -94,9 +88,6 @@ struct Projectile
 	void Render(Texture2D texture) const noexcept;
 };
 
-// TODO: Add defaults or constructor
-// TODO: Add const to Render()
-// TODO: Add getters: IsActive(), GetHealth()
 struct Wall 
 {
 	static constexpr float Y_OFFSET = 250.0f;
@@ -115,11 +106,8 @@ struct Wall
 	void Update() noexcept;
 };
 
-// TODO: Check if 'color' is used - delete if not
 // TODO: Make moveRight and active private
-// TODO: Add const to Render()
 // TODO: Add parameter to Update(int screenWidth)
-// TODO: Add getters: IsActive(), GetY(), GetPosition()
 struct Alien
 {
 	static constexpr float DEFAULT_SPEED = 2.0f;
@@ -127,7 +115,6 @@ struct Alien
 	static constexpr float DESCENT_AMOUNT = 50.0f;
 	static constexpr int POINTS = 100;
 
-	Color color = WHITE;
 	Vector2 position = { 0, 0 };
 	float radius = DEFAULT_RADIUS;
 	bool active = true;
@@ -152,7 +139,6 @@ struct Star
 	void Render() const noexcept;
 };
 
-//TODO: similiar as before
 struct Background
 {
 	std::vector<Star> Stars;
@@ -164,12 +150,6 @@ struct Background
 	void Render() const noexcept;
 };
 
-// TODO: C-style array 'name' - use std::string instead
-// TODO: Break Update() into smaller functions
-// TODO: Pass string by const reference: InsertNewHighScore(const std::string& name)
-// TODO: Add const to CheckCollision()
-// TODO: LoadLeaderboard() is empty
-// TODO: SaveLeaderboard() is incomplete
 struct Game
 {
 	// Gamestate
@@ -203,10 +183,6 @@ struct Game
 	bool CheckNewHighScore();
 
 	void InsertNewHighScore(const std::string& name);
-
-	void LoadLeaderboard();
-	void SaveLeaderboard();
-
 
 	// Entity Storage and Resources
 	Resources resources;

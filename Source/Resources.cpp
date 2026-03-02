@@ -1,9 +1,6 @@
 #include "Resources.h"
 #include <iostream>
 
-
-// TODO: Implement destructor to unload all textures
-// TODO: Implement move constructor and move assignment
 void Resources::Load()
 {
 	alienTexture = LoadTexture("./Assets/Alien.png");
@@ -59,11 +56,3 @@ Resources& Resources::operator=(Resources&& other) noexcept
     }
     return *this;
 }
-
-/*
-void Resources::Unload()
-{
-	UnloadTexture(barrierTexture);
-	UnloadTexture(alienTexture);
-}
-*/

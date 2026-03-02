@@ -1,13 +1,10 @@
 #include "game.h"
 #include <iostream>
 #include <vector>
-#include <chrono>
-#include <thread>
 #include <fstream>
 #include <algorithm>
 
 // TODO: Magic number
-// TODO: Delete unused includes <chrono> and <thread>
 // TODO: Move math functions to MathUtils namespace
 // TODO: pointInCircle() can be simplified: return (distance < radius);
 
@@ -33,8 +30,6 @@ bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pytha
 	}
 }
 
-// TODO: Fix Resource RAII (Load() called but never Unloaded)
-// TODO: Two step init for Wall, Player and Background 
 // TODO: Replace C-style casts with static_cast;
 
 void Game::Start()
@@ -82,7 +77,6 @@ void Game::End()
 
 void Game::Continue()
 {
-	SaveLeaderboard();
 	gameState = State::STARTSCREEN;
 }
 
@@ -326,7 +320,6 @@ void Game::UpdateEndScreen()
 }
 
 // TODO: Maybe break into RenderStartScreen(), RenderGameplay(), etc.
-// TODO: Add const correctness and use range-for loops
 void Game::Render() const noexcept
 {
 	switch (gameState)
@@ -504,45 +497,6 @@ void Game::InsertNewHighScore(const std::string& name)
 }
 
 // TODO: Optimize CheckCollision (const, abs diff) and add unit tests
-// TODO: Implement or delete empty LoadLeaderboard()
-// TODO: Fix SaveLeaderboard() (currently only opens file, doesn't write/close)
-void Game::LoadLeaderboard()
-{
-	// CLEAR LEADERBOARD
-
-	// OPEN FILE
-
-	// READ DATA
-
-	// WRITE DATA ONTO LEADERBOARD
-
-	//CLOSE FILE
-}
-
-void Game::SaveLeaderboard()
-{
-	// SAVE LEADERBOARD AS ARRAY
-
-	// OPEN FILE
-	std::fstream file;
-
-	file.open("Leaderboard");
-
-	if (!file)
-	{
-		std::cout << "file not found \n";
-
-	}
-	else
-	{
-		std::cout << "file found \n";
-	}
-	// CLEAR FILE
-
-	// WRITE ARRAY DATA INTO FILE
-
-	// CLOSE FILE
-}
 
 bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)  const noexcept
 {
@@ -600,9 +554,7 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 
 }
 
-// TODO: Move Initialize() logic into Constructors
 // TODO: Implement frame-independent movement using deltaTime
-// TODO: Add const to all Render() functions
 // TODO: Use IsActive(), TakeDamage() instead of direct access
 Player::Player(int screenWidth)
 	: x_pos(screenWidth / 2.0f)
@@ -814,7 +766,6 @@ void Alien::Render(Texture2D texture) const noexcept
 		WHITE);
 }
 
-// TODO CRITICAL: Move Init logic to Constructor; use std::generate_n
 // TODO: Fix inconsistent color comments
 
 //BACKGROUND
