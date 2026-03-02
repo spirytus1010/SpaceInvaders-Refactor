@@ -230,4 +230,17 @@ struct Game
 
 	int framesCounter = 0;
 
+private:
+	// Update
+	void UpdateStartScreen();
+	void UpdateGameplay();
+	void UpdateEndScreen();
+
+	// Gameplay
+	void UpdateEntities();
+	void HandleCollisions();
+	void HandlePlayerShooting();
+	void HandleAlienShooting();
+	void RemoveInactiveEntities();
+	void CheckGameOver();
 };
