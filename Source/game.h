@@ -12,6 +12,7 @@ constexpr int FORMATION_HEIGHT = 5;
 constexpr int ALIEN_SPACING = 80;
 constexpr int FORMATION_START_X = 100;
 constexpr int FORMATION_START_Y = 50;
+constexpr int FORMATION_HORIZONTAL_OFFSET = 450;
 
 // Shooting timing 
 constexpr int FRAMES_PER_ALIEN_SHOT = 59;  // ~1 second at 60 FPS

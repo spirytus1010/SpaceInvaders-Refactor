@@ -458,7 +458,7 @@ void Game::SpawnAliens()
         for (int col = 0; col < FORMATION_WIDTH; col++) {
             Aliens.emplace_back();
             auto& alien = Aliens.back();
-            alien.position.x = FORMATION_START_X + 450 + (col * ALIEN_SPACING);
+            alien.position.x = FORMATION_START_X + FORMATION_HORIZONTAL_OFFSET + (col * ALIEN_SPACING);
             alien.position.y = FORMATION_START_Y + (row * ALIEN_SPACING);
         }
     }
