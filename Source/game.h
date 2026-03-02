@@ -85,6 +85,11 @@ struct Projectile
 	Vector2 lineStart = { 0, 0 };
 	Vector2 lineEnd = { 0, 0 };
 
+	Projectile() = default;  
+	Projectile(Vector2 pos, EntityType t)
+		: position(pos), type(t) {
+	} 
+
 	void Update() noexcept;
 	void Render(Texture2D texture) const noexcept;
 };

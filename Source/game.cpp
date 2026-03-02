@@ -194,12 +194,14 @@ void Game::HandlePlayerShooting()
 {
 	if (!IsKeyPressed(KEY_SPACE)) return;
 
-	float window_height = static_cast<float>(GetScreenHeight());
-	Projectile newProjectile;
-	newProjectile.position.x = player.x_pos;
-	newProjectile.position.y = window_height - player.player_base_height - Projectile::SPAWN_OFFSET;
-	newProjectile.type = EntityType::PLAYER_PROJECTILE;
-	Projectiles.push_back(newProjectile);
+	float y = static_cast<float>(GetScreenHeight())
+		- player.player_base_height
+		- Projectile::SPAWN_OFFSET;
+
+	Projectiles.emplace_back(
+		Vector2{ player.x_pos, y },
+		EntityType::PLAYER_PROJECTILE
+	);
 }
 
 void Game::HandleAlienShooting()
@@ -213,12 +215,11 @@ void Game::HandleAlienShooting()
 
 	int randomIndex = (Aliens.size() > 1) ? rand() % Aliens.size() : 0;
 
-	Projectile alienProjectile;
-	alienProjectile.position = Aliens[randomIndex].position;
-	alienProjectile.position.y += 40;
-	alienProjectile.speed = -15;
-	alienProjectile.type = EntityType::ENEMY_PROJECTILE;
-	Projectiles.push_back(alienProjectile);
+	Vector2 spawnPos = Aliens[randomIndex].position;
+	spawnPos.y += 40;
+
+	Projectiles.emplace_back(spawnPos, EntityType::ENEMY_PROJECTILE);
+	Projectiles.back().speed = -15; 
 }
 
 void Game::RemoveInactiveEntities()
