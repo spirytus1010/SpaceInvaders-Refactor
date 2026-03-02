@@ -467,12 +467,7 @@ void Game::SpawnAliens()
 
 bool Game::CheckNewHighScore()
 {
-	if (score > Leaderboard[4].score)
-	{
-		return true;
-	}
-
-	return false;
+	return score > Leaderboard[4].score;
 }
 
 void Game::InsertNewHighScore(const std::string& name)
