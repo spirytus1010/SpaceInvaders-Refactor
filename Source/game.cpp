@@ -454,19 +454,14 @@ void Game::Render() const noexcept
 
 void Game::SpawnAliens()
 {
-	for (int row = 0; row < FORMATION_HEIGHT; row++) {
-		for (int col = 0; col < FORMATION_WIDTH; col++) {
-			Alien newAlien = Alien();
-			newAlien.active = true;
-			newAlien.position.x = FORMATION_START_X + 450 + (col * ALIEN_SPACING);
-			newAlien.position.y = FORMATION_START_Y
-				+ (row * ALIEN_SPACING);
-			Aliens.push_back(newAlien);
-			std::cout << "Find Alien -X:" << newAlien.position.x << std::endl;
-			std::cout << "Find Alien -Y:" << newAlien.position.y << std::endl;
-		}
-	}
-
+    for (int row = 0; row < FORMATION_HEIGHT; row++) {
+        for (int col = 0; col < FORMATION_WIDTH; col++) {
+            Aliens.emplace_back();
+            auto& alien = Aliens.back();
+            alien.position.x = FORMATION_START_X + 450 + (col * ALIEN_SPACING);
+            alien.position.y = FORMATION_START_Y + (row * ALIEN_SPACING);
+        }
+    }
 }
 
 bool Game::CheckNewHighScore()
