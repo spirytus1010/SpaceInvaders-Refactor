@@ -494,14 +494,11 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 
 	float closestLength = closeToStart + closeToEnd;
 
-	if (closestLength == length + buffer || closestLength == length - buffer)
+	if (std::abs(closestLength - length) <= buffer)
 	{
-		//Point is on the line!
-
-		//Compare length between closest point and circle centre with circle radius
-
-		float closeToCentre = lineLength(A, { closestX, closestY }); //closestX + Y compared to circle centre
-
+		// Point is on the line!
+		// Compare distance from closest point to circle centre with circle radius
+		float closeToCentre = lineLength(C, { closestX, closestY });
 		return closeToCentre < circleRadius;
 	}
 	else
