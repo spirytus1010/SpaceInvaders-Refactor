@@ -45,32 +45,11 @@ int main(void)
 
     
     //--------------------------------------------------------------------------------------
-
-    InitAudioDevice();
-
-    auto sound = LoadSound("./hitHurt.ogg");
     
-
-
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        // Update
-        //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
-
-        //if (IsKeyPressed(KEY_SPACE))
-        //{
-        //    PlaySound(sound);
-        //}
-
-        //if (IsKeyPressed(KEY_BACKSPACE))
-        //{
-        //    StopSound(sound);
-        //}
-
         game.Update();
       
 

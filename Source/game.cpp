@@ -1,5 +1,4 @@
 #include "game.h"
-#include <iostream>
 #include <vector>
 #include <fstream>
 #include <algorithm>
@@ -326,21 +325,17 @@ void Game::Render() const noexcept
 	switch (gameState)
 	{
 	case State::STARTSCREEN:
-		//Code
+
 		DrawText("SPACE INVADERS", 200, 100, 160, YELLOW);
 
 		DrawText("PRESS SPACE TO BEGIN", 200, 350, 40, YELLOW);
 
-
 		break;
 	case State::GAMEPLAY:
-		//Code
-
 
 		//background render LEAVE THIS AT TOP
 		background.Render();
 
-		//DrawText("GAMEPLAY", 50, 30, 40, YELLOW);
 		DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
 		DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 
@@ -362,21 +357,8 @@ void Game::Render() const noexcept
 			alien.Render(resources.alienTexture);
 		}
 
-
-
-
-
-
 		break;
 	case State::ENDSCREEN:
-		//Code
-		//DrawText("END", 50, 50, 40, YELLOW);
-
-
-		
-
-		
-
 
 		if (newHighScore)
 		{
@@ -448,7 +430,6 @@ void Game::Render() const noexcept
 
 		break;
 	default:
-		//SHOULD NOT HAPPEN
 		break;
 	}
 }
@@ -558,9 +539,6 @@ Player::Player(int screenWidth)
 	, timer(0.0f)
 	, type(EntityType::PLAYER)
 {
-	std::cout << "Player created at X:" << x_pos
-		<< " Y:" << GetScreenHeight() - player_base_height
-		<< std::endl;
 }
 
 void Player::Update() noexcept
