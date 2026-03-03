@@ -44,7 +44,15 @@ Resources& Resources::operator=(Resources&& other) noexcept
 {
     if (this != &other)
     {
-        this->~Resources();
+        // Release currently owned resources
+        if (isLoaded)
+        {
+            for (auto& texture : shipTextures)
+                UnloadTexture(texture);
+            UnloadTexture(alienTexture);
+            UnloadTexture(barrierTexture);
+            UnloadTexture(laserTexture);
+        }
 
         shipTextures = std::move(other.shipTextures);
         alienTexture = other.alienTexture;

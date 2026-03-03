@@ -430,6 +430,7 @@ void Game::Render() const noexcept
 
 		break;
 	default:
+		//SHOULD NOT HAPPEN
 		break;
 	}
 }
@@ -543,7 +544,7 @@ Player::Player(int screenWidth)
 
 void Player::Update() noexcept
 {
-
+	timer += GetFrameTime();
 	//Movement
 	direction = 0;
 	if (IsKeyDown(KEY_LEFT))
@@ -616,7 +617,7 @@ void Projectile::Update() noexcept
 	lineStart.x = position.x;
 	lineEnd.x   = position.x;
 
-	if (position.y < 0 || position.y > 1500)
+	if (position.y < 0 || position.y > static_cast<float>(GetScreenHeight()))
 	{
 		active = false;
 	}
