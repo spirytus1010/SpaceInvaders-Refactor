@@ -36,14 +36,12 @@ void Game::Start()
 		Walls.emplace_back(Vector2{ x, y }, Wall::DEFAULT_RADIUS);
 	}
 
-
 	//creating player
 	player = Player(GetScreenWidth());
 
 	//creating aliens
 	SpawnAliens();
 	
-
 	//creating background
 	background = Background(600);
 
@@ -52,6 +50,12 @@ void Game::Start()
 
 	gameState = State::GAMEPLAY;
 
+}
+
+Game::Game()
+	: gameState(State::STARTSCREEN)
+{
+	resources.Load();
 }
 
 void Game::End()
@@ -68,12 +72,6 @@ void Game::End()
 void Game::Continue()
 {
 	gameState = State::STARTSCREEN;
-}
-
-void Game::Launch()
-{
-	//LOAD SOME RESOURCES HERE
-	resources.Load();
 }
 
 void Game::Update()
