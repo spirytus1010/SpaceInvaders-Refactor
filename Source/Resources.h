@@ -2,7 +2,6 @@
 #include "raylib.h"
 #include "vector"
 
-// TODO: Make members private
 struct Resources 
 {
 	Resources() = default;
@@ -18,8 +17,8 @@ struct Resources
 	void Load();
 
 	std::vector<Texture2D> shipTextures;
-	Texture2D alienTexture;
-	Texture2D barrierTexture;
-	Texture2D laserTexture;
+	Texture2D alienTexture{};
+	Texture2D barrierTexture{};
+	Texture2D laserTexture{};
 	bool isLoaded = false;
 };

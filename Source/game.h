@@ -185,28 +185,28 @@ struct Background
 
 struct Game
 {
-	// Gamestate
+	Game();
+	void Update();
+	void Render() const noexcept;
+
+private:
 	State gameState = State::STARTSCREEN;
 
-	// Score
 	int score = 0;
 
-	// for later, make a file where you can adjust the number of walls (config file) 
 	int wallCount = 5;
 
-	//Aliens shooting
 	float shootTimer = 0;
 
 	bool newHighScore = false;
-	
-	Game();
+
+
 	void Start();
 	void End();
 
 	void Continue();
 
-	void Update();
-	void Render() const noexcept;
+
 
 	void SpawnAliens();
 
@@ -228,7 +228,7 @@ struct Game
 	std::vector<Alien> Aliens;
 
 	std::vector<PlayerData> Leaderboard = { {"Player 1", 500}, {"Player 2", 400}, {"Player 3", 300}, {"Player 4", 200}, {"Player 5", 100} };
-	
+
 	Background background;
 
 	std::string name;
@@ -238,7 +238,6 @@ struct Game
 
 	int framesCounter = 0;
 
-private:
 	// Update
 	void UpdateStartScreen();
 	void UpdateGameplay();
