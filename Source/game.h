@@ -85,10 +85,9 @@ struct Projectile
 	Vector2 lineStart = { 0, 0 };
 	Vector2 lineEnd = { 0, 0 };
 
-	Projectile() = default;  
-	Projectile(Vector2 pos, EntityType t)
-		: position(pos), type(t) {
-	} 
+	Projectile(Vector2 pos, EntityType t, int spd = DEFAULT_SPEED)
+		: position(pos), type(t), speed(spd) {
+	}
 
 	void Update() noexcept;
 	void Render(Texture2D texture) const noexcept;
@@ -130,6 +129,9 @@ struct Alien
 
 	float speed = DEFAULT_SPEED;
 
+	Alien() = default; 
+	explicit Alien(Vector2 pos) : position(pos) {}
+
 	void Update() noexcept;
 	void Render(Texture2D texture) const noexcept;
 };
@@ -141,6 +143,16 @@ struct Star
 	Vector2 position = { 0, 0 };
 	Color color = GRAY;
 	float size = 0;
+
+	Star() = default;
+	Star(Vector2 initPos, Color col, float sz)
+		: initPosition(initPos)
+		, position(initPos)
+		, color(col)
+		, size(sz)
+	{
+	}
+
 	void Update(float starOffset) noexcept;
 	void Render() const noexcept;
 };

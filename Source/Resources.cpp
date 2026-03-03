@@ -1,5 +1,4 @@
 #include "Resources.h"
-#include <iostream>
 
 void Resources::Load()
 {

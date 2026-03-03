@@ -17,16 +17,7 @@ float lineLength(Vector2 A, Vector2 B) //Uses pythagoras to calculate the length
 
 bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pythagoras to calculate if a point is within a circle or not
 {
-	float distanceToCentre = lineLength(circlePos, point);
-
-	if (distanceToCentre < radius)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return lineLength(circlePos, point) < radius;
 }
 
 // TODO: Replace C-style casts with static_cast;
@@ -217,8 +208,7 @@ void Game::HandleAlienShooting()
 	Vector2 spawnPos = Aliens[randomIndex].position;
 	spawnPos.y += 40;
 
-	Projectiles.emplace_back(spawnPos, EntityType::ENEMY_PROJECTILE);
-	Projectiles.back().speed = -15; 
+	Projectiles.emplace_back(spawnPos, EntityType::ENEMY_PROJECTILE, -15);
 }
 
 void Game::RemoveInactiveEntities()
@@ -437,14 +427,13 @@ void Game::Render() const noexcept
 
 void Game::SpawnAliens()
 {
-    for (int row = 0; row < FORMATION_HEIGHT; row++) {
-        for (int col = 0; col < FORMATION_WIDTH; col++) {
-            Aliens.emplace_back();
-            auto& alien = Aliens.back();
-			alien.position.x = static_cast<float>(FORMATION_START_X + FORMATION_HORIZONTAL_OFFSET + (col * ALIEN_SPACING));
-			alien.position.y = static_cast<float>(FORMATION_START_Y + (row * ALIEN_SPACING));
-        }
-    }
+	for (int row = 0; row < FORMATION_HEIGHT; row++) {
+		for (int col = 0; col < FORMATION_WIDTH; col++) {
+			float x = static_cast<float>(FORMATION_START_X + FORMATION_HORIZONTAL_OFFSET + col * ALIEN_SPACING);
+			float y = static_cast<float>(FORMATION_START_Y + row * ALIEN_SPACING);
+			Aliens.emplace_back(Vector2{ x, y });
+		}
+	}
 }
 
 bool Game::CheckNewHighScore()
@@ -454,9 +443,7 @@ bool Game::CheckNewHighScore()
 
 void Game::InsertNewHighScore(const std::string& playerName)
 {
-	PlayerData newData;
-	newData.name = playerName;
-	newData.score = score;
+	PlayerData newData{ playerName, score };
 
 	auto it = std::find_if(Leaderboard.begin(), Leaderboard.end(),
 		[&newData](const PlayerData& entry) {
@@ -743,17 +730,17 @@ void Star::Render() const noexcept
 	DrawCircle(static_cast<int>(position.x), static_cast<int>(position.y), size, color);
 }
 
-Background::Background(int starAmount) {
+Background::Background(int starAmount) 
+{
 	for (int i = 0; i < starAmount; i++) {
-		Star newStar;
-		newStar.initPosition.x = static_cast<float>(GetRandomValue(-150, GetScreenWidth() + 150));
-		newStar.initPosition.y = static_cast<float>(GetRandomValue(0, GetScreenHeight()));
-
-		//random color?
-		newStar.color = SKYBLUE;
-		newStar.size = static_cast<float>(GetRandomValue(1, 4)) / 2.0f;
-		Stars.push_back(newStar);
-	}
+        Vector2 pos = {
+            static_cast<float>(GetRandomValue(-150, GetScreenWidth() + 150)),
+            static_cast<float>(GetRandomValue(0, GetScreenHeight()))
+        };
+        float size = static_cast<float>(GetRandomValue(1, 4)) / 2.0f;
+        
+        Stars.emplace_back(pos, SKYBLUE, size);
+    }
 }
 
 void Background::Update(float offset) noexcept
