@@ -130,8 +130,8 @@ void Game::UpdateEntities()
 		alien.Update();
 	}
 
-	Vector2 playerPos = { player.x_pos, static_cast<float>(player.player_base_height) };
-	Vector2 cornerPos = { 0, static_cast<float>(player.player_base_height) };
+	Vector2 playerPos = { player.GetX(), static_cast<float>(player.GetBaseHeight()) };
+	Vector2 cornerPos = { 0, static_cast<float>(player.GetBaseHeight()) };
 	float offset = lineLength(playerPos, cornerPos) * -1; 
 	background.Update(offset / BACKGROUND_SCROLL_DIVISOR);
 }
@@ -142,10 +142,10 @@ void Game::HandleCollisions()
 	for (auto& projectile : Projectiles) {
 		if (projectile.type == EntityType::PLAYER_PROJECTILE && projectile.active) {
 			for (auto& alien : Aliens) {
-				if (CheckCollision(alien.position, alien.radius,
+				if (CheckCollision(alien.GetPosition(), alien.GetRadius(),
 					projectile.lineStart, projectile.lineEnd)) {
 					projectile.active = false;
-					alien.active = false;
+					alien.Deactivate(); 
 					score += Alien::POINTS;
 				}
 			}
@@ -153,13 +153,13 @@ void Game::HandleCollisions()
 	}
 
 	// Enemy projectiles vs player
-	Vector2 playerPos = { player.x_pos, static_cast<float>(GetScreenHeight()) - player.player_base_height };
+	Vector2 playerPos = { player.GetX(), static_cast<float>(GetScreenHeight()) - player.GetBaseHeight() };
 	for (auto& projectile : Projectiles) {
 		if (projectile.type == EntityType::ENEMY_PROJECTILE && projectile.active) {
-			if (CheckCollision(playerPos, player.radius,
+			if (CheckCollision(playerPos, player.GetRadius(),
 				projectile.lineStart, projectile.lineEnd)) {
 				projectile.active = false;
-				player.lives -= 1;
+				player.TakeDamage(); 
 			}
 		}
 	}
@@ -168,10 +168,10 @@ void Game::HandleCollisions()
 	for (auto& projectile : Projectiles) {
 		if (projectile.active) {
 			for (auto& wall : Walls) {
-				if (CheckCollision(wall.position, wall.radius,
+				if (CheckCollision(wall.GetPosition(), wall.GetRadius(),
 					projectile.lineStart, projectile.lineEnd)) {
 					projectile.active = false;
-					wall.health -= 1;
+					wall.Hit();
 				}
 			}
 		}
@@ -183,11 +183,11 @@ void Game::HandlePlayerShooting()
 	if (!IsKeyPressed(KEY_SPACE)) return;
 
 	float y = static_cast<float>(GetScreenHeight())
-		- player.player_base_height
+		- player.GetBaseHeight()
 		- Projectile::SPAWN_OFFSET;
 
 	Projectiles.emplace_back(
-		Vector2{ player.x_pos, y },
+		Vector2{ player.GetX(), y },
 		EntityType::PLAYER_PROJECTILE
 	);
 }
@@ -201,9 +201,9 @@ void Game::HandleAlienShooting()
 
 	if (Aliens.empty()) return;
 
-	int randomIndex = (Aliens.size() > 1) ? rand() % Aliens.size() : 0;
+	size_t randomIndex = (Aliens.size() > 1) ? rand() % Aliens.size() : 0;
 
-	Vector2 spawnPos = Aliens[randomIndex].position;
+	Vector2 spawnPos = Aliens[randomIndex].GetPosition();
 	spawnPos.y += 40;
 
 	Projectiles.emplace_back(spawnPos, EntityType::ENEMY_PROJECTILE, -15);
@@ -216,24 +216,24 @@ void Game::RemoveInactiveEntities()
 		});
 
 	std::erase_if(Aliens, [](const Alien& a) {
-		return !a.active;
+		return !a.IsActive();
 		});
 
 	std::erase_if(Walls, [](const Wall& w) {
-		return !w.active;
+		return !w.IsActive(); 
 		});
 }
 
 void Game::CheckGameOver()
 {
-	if (player.lives < 1) {
+	if (!player.IsAlive()) { 
 		End();
 		return;
 	}
 
 	if (std::any_of(Aliens.begin(), Aliens.end(),
 		[this](const Alien& alien) {
-			return alien.position.y > GetScreenHeight() - player.player_base_height;
+			return alien.GetPosition().y > GetScreenHeight() - player.GetBaseHeight();
 		})) {
 		End();
 		return;
@@ -325,10 +325,10 @@ void Game::Render() const noexcept
 		background.Render();
 
 		DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
-		DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
+		DrawText(TextFormat("Lives: %i", player.GetLives()), 50, 70, 40, YELLOW);
 
 		//player rendering 
-		player.Render(resources.shipTextures[player.activeTexture]);
+		player.Render(resources.shipTextures);
 
 		//projectile rendering
 		for (auto& projectile : Projectiles) {
@@ -566,11 +566,11 @@ void Player::Update() noexcept
 	
 }
 
-void Player::Render(Texture2D texture) const noexcept
+void Player::Render(const std::vector<Texture2D>& textures) const noexcept
 {
 	float window_height = static_cast<float>(GetScreenHeight());
 
-	DrawTexturePro(texture,
+	DrawTexturePro(textures[activeTexture],
 		{
 			0,
 			0,

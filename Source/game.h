@@ -51,22 +51,29 @@ struct Player
 	static constexpr float ANIMATION_INTERVAL = 0.4f;
 	static constexpr int MAX_TEXTURE_INDEX = 2;
 
+	Player() = default;
+	explicit Player(int screenWidth);
+	void Render(const std::vector<Texture2D>& textures) const noexcept;
+	void Update() noexcept;
+
+	bool IsAlive() const noexcept { return lives > 0; }
+	void TakeDamage() noexcept { --lives; }
+	int GetLives() const noexcept { return lives; }
+	float GetX() const noexcept { return x_pos; }
+	float GetBaseHeight() const noexcept { return player_base_height; }
+	float GetRadius() const noexcept { return radius; }
+
+private:
 	float x_pos = 0;
-	float speed = DEFAULT_SPEED;                  
-	float player_base_height = BASE_HEIGHT;      
-	float radius = DEFAULT_RADIUS;                
-	int lives = INITIAL_LIVES;                    
+	float speed = DEFAULT_SPEED;
+	float player_base_height = BASE_HEIGHT;
+	float radius = DEFAULT_RADIUS;
+	int lives = INITIAL_LIVES;
 	int direction = 0;
 	int activeTexture = 0;
 	float timer = 0;
 
 	EntityType type = EntityType::PLAYER;
-
-	Player() = default;
-	explicit Player(int screenWidth);
-	void Render(Texture2D texture) const noexcept;
-	void Update() noexcept;
-	
 };
 
 struct Projectile
@@ -97,18 +104,24 @@ struct Wall
 {
 	static constexpr float Y_OFFSET = 250.0f;
 	static constexpr int INITIAL_HEALTH = 50;
-	static constexpr float DEFAULT_RADIUS = 60.0f;
-
-	Vector2 position = { 0, 0 };
-	bool active = true;
-	int health = INITIAL_HEALTH;                  
-	float radius = DEFAULT_RADIUS;
+	static constexpr float DEFAULT_RADIUS = 60.0f;	
 
 	Wall() = default;
 	Wall(Vector2 pos, float rad);
 
 	void Render(Texture2D texture) const noexcept;
 	void Update() noexcept;
+
+	void Hit() noexcept { --health; }
+	bool IsActive() const noexcept { return active; }
+	Vector2 GetPosition() const noexcept { return position; }
+	float GetRadius() const noexcept { return radius; }
+
+private:
+	Vector2 position = { 0, 0 };
+	bool active = true;
+	int health = INITIAL_HEALTH;
+	float radius = DEFAULT_RADIUS;
 };
 
 // TODO: Make moveRight and active private
@@ -120,6 +133,18 @@ struct Alien
 	static constexpr float DESCENT_AMOUNT = 50.0f;
 	static constexpr int POINTS = 100;
 
+	Alien() = default; 
+	explicit Alien(Vector2 pos) : position(pos) {}
+
+	void Update() noexcept;
+	void Render(Texture2D texture) const noexcept;
+
+	bool IsActive() const noexcept { return active; }
+	void Deactivate() noexcept { active = false; }
+	Vector2 GetPosition() const noexcept { return position; }
+	float GetRadius() const noexcept { return radius; }
+
+private:
 	Vector2 position = { 0, 0 };
 	float radius = DEFAULT_RADIUS;
 	bool active = true;
@@ -128,12 +153,6 @@ struct Alien
 	EntityType type = EntityType::ENEMY;
 
 	float speed = DEFAULT_SPEED;
-
-	Alien() = default; 
-	explicit Alien(Vector2 pos) : position(pos) {}
-
-	void Update() noexcept;
-	void Render(Texture2D texture) const noexcept;
 };
 
 
