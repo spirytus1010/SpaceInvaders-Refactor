@@ -4,8 +4,6 @@
 #include "Resources.h"
 #include <string>
 
-// TODO: Make members private
-
 // Formation layout
 constexpr int FORMATION_WIDTH = 8;
 constexpr int FORMATION_HEIGHT = 5;
@@ -124,8 +122,6 @@ private:
 	float radius = DEFAULT_RADIUS;
 };
 
-// TODO: Make moveRight and active private
-// TODO: Add parameter to Update(int screenWidth)
 struct Alien
 {
 	static constexpr float DEFAULT_SPEED = 2.0f;
