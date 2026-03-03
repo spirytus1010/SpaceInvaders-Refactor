@@ -299,7 +299,7 @@ void Game::UpdateEndScreen()
 		framesCounter = 0;
 	}
 
-	if (name.size() > 0 && name.size() <= 9 && IsKeyReleased(KEY_ENTER))
+	if (!name.empty() && name.size() <= 9 && IsKeyReleased(KEY_ENTER))
 	{
 		InsertNewHighScore(name);
 		newHighScore = false;
@@ -574,8 +574,8 @@ void Player::Render(const std::vector<Texture2D>& textures) const noexcept
 		{
 			0,
 			0,
-			352,
-			352,
+			static_cast<float>(textures[activeTexture].width),
+			static_cast<float>(textures[activeTexture].height),
 		},
 		{
 			x_pos, window_height - player_base_height,
@@ -611,8 +611,8 @@ void Projectile::Render(Texture2D texture) const noexcept
 		{
 			0,
 			0,
-			176,
-			176,
+			static_cast<float>(texture.width),
+			static_cast<float>(texture.height),
 		},
 		{
 			position.x,
@@ -638,8 +638,8 @@ void Wall::Render(Texture2D texture) const noexcept
 		{
 			0,
 			0,
-			704,
-			704,
+			static_cast<float>(texture.width),
+			static_cast<float>(texture.height),
 		},
 		{
 			position.x,
@@ -697,8 +697,8 @@ void Alien::Render(Texture2D texture) const noexcept
 		{
 			0,
 			0,
-			352,
-			352,
+			static_cast<float>(texture.width),
+			static_cast<float>(texture.height),
 		},
 		{
 			position.x,
