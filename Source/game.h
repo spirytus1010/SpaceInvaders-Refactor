@@ -98,15 +98,15 @@ struct Wall
 {
 	static constexpr float Y_OFFSET = 250.0f;
 	static constexpr int INITIAL_HEALTH = 50;
-	static constexpr int DEFAULT_RADIUS = 60;
+	static constexpr float DEFAULT_RADIUS = 60.0f;
 
 	Vector2 position = { 0, 0 };
 	bool active = true;
 	int health = INITIAL_HEALTH;                  
-	int radius = DEFAULT_RADIUS;
+	float radius = DEFAULT_RADIUS;
 
 	Wall() = default;
-	Wall(Vector2 pos, int rad);
+	Wall(Vector2 pos, float rad);
 
 	void Render(Texture2D texture) const noexcept;
 	void Update() noexcept;
@@ -128,7 +128,7 @@ struct Alien
 
 	EntityType type = EntityType::ENEMY;
 
-	int speed = DEFAULT_SPEED;
+	float speed = DEFAULT_SPEED;
 
 	void Update() noexcept;
 	void Render(Texture2D texture) const noexcept;

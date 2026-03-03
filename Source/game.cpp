@@ -11,7 +11,7 @@
 // MATH FUNCTIONS
 float lineLength(Vector2 A, Vector2 B) //Uses pythagoras to calculate the length of a line
 {
-	float length = sqrtf(pow(B.x - A.x, 2) + pow(B.y - A.y, 2));
+	float length = sqrtf(powf(B.x - A.x, 2.0f) + powf(B.y - A.y, 2.0f));
 
 	return length;
 }
@@ -35,8 +35,8 @@ bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pytha
 void Game::Start()
 {
 	// creating walls 
-	float window_width = (float)GetScreenWidth(); 
-	float window_height = (float)GetScreenHeight(); 
+	float window_width = static_cast<float>(GetScreenWidth());
+	float window_height = static_cast<float>(GetScreenHeight());
 	float wall_distance = window_width / (wallCount + 1); 
 	for (int i = 0; i < wallCount; i++)
 	{
@@ -391,18 +391,18 @@ void Game::Render() const noexcept
 			if (mouseOnText)
 			{
 				// HOVER CONFIRMIATION
-				DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
+				DrawRectangleLines(static_cast<int>(textBox.x), static_cast<int>(textBox.y), static_cast<int>(textBox.width), static_cast<int>(textBox.height), RED);
 			}
 			else
 			{
-				DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
+				DrawRectangleLines(static_cast<int>(textBox.x), static_cast<int>(textBox.y), static_cast<int>(textBox.width), static_cast<int>(textBox.height), DARKGRAY);
 			}
 
 			//Draw the name being typed out
-			DrawText(name.c_str(), (int)textBox.x + 5, (int)textBox.y + 8, 40, MAROON);
+			DrawText(name.c_str(), static_cast<int>(textBox.x + 5), static_cast<int>(textBox.y + 8), 40, MAROON);
 
 			//Draw the text explaining how many characters are used
-			DrawText(TextFormat("INPUT CHARS: %i/%i", (int)name.size(), 9), 600, 600, 20, YELLOW);
+			DrawText(TextFormat("INPUT CHARS: %i/%i", static_cast<int>(name.size()), 9), 600, 600, 20, YELLOW);
 
 			if (mouseOnText)
 			{
@@ -411,7 +411,7 @@ void Game::Render() const noexcept
 					// Draw blinking underscore char
 					if (((framesCounter / 20) % 2) == 0)
 					{
-						DrawText("_", (int)textBox.x + 8 + MeasureText(name.c_str(), 40), (int)textBox.y + 12, 40, MAROON);
+						DrawText("_", static_cast<int>(textBox.x + 8) + MeasureText(name.c_str(), 40), static_cast<int>(textBox.y + 12), 40, MAROON);
 					}
 
 				}
@@ -459,8 +459,8 @@ void Game::SpawnAliens()
         for (int col = 0; col < FORMATION_WIDTH; col++) {
             Aliens.emplace_back();
             auto& alien = Aliens.back();
-            alien.position.x = FORMATION_START_X + FORMATION_HORIZONTAL_OFFSET + (col * ALIEN_SPACING);
-            alien.position.y = FORMATION_START_Y + (row * ALIEN_SPACING);
+			alien.position.x = static_cast<float>(FORMATION_START_X + FORMATION_HORIZONTAL_OFFSET + (col * ALIEN_SPACING));
+			alien.position.y = static_cast<float>(FORMATION_START_Y + (row * ALIEN_SPACING));
         }
     }
 }
@@ -470,10 +470,10 @@ bool Game::CheckNewHighScore()
 	return score > Leaderboard[4].score;
 }
 
-void Game::InsertNewHighScore(const std::string& name)
+void Game::InsertNewHighScore(const std::string& playerName)
 {
 	PlayerData newData;
-	newData.name = name;
+	newData.name = playerName;
 	newData.score = score;
 
 	auto it = std::find_if(Leaderboard.begin(), Leaderboard.end(),
@@ -509,7 +509,7 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 	float length = lineLength(A, B);
 	
 	// calculate the dot product
-	float dotP = (((C.x - A.x) * (B.x - A.x)) + ((C.y - A.y) * (B.y - A.y))) / pow(length, 2);
+	float dotP = (((C.x - A.x) * (B.x - A.x)) + ((C.y - A.y) * (B.y - A.y))) / (length * length);
 
 	// use dot product to find closest point
 	float closestX = A.x + (dotP * (B.x - A.x));
@@ -520,7 +520,7 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 	// if the distance of the vectors combined is the same as the length the point is on the line
 
 	//since we are using floating points, we will allow the distance to be slightly innaccurate to create a smoother collision
-	float buffer = 0.1;
+	float buffer = 0.1f;
 
 	float closeToStart = lineLength(A, { closestX, closestY }); //closestX + Y compared to line Start
 	float closeToEnd = lineLength(B, { closestX, closestY });	//closestX + Y compared to line End
@@ -607,7 +607,7 @@ void Player::Update() noexcept
 
 void Player::Render(Texture2D texture) const noexcept
 {
-	float window_height = GetScreenHeight(); 
+	float window_height = static_cast<float>(GetScreenHeight());
 
 	DrawTexturePro(texture,
 		{
@@ -646,7 +646,6 @@ void Projectile::Update() noexcept
 
 void Projectile::Render(Texture2D texture) const noexcept
 {
-	//DrawCircle((int)position.x, (int)position.y, 10, RED);
 	DrawTexturePro(texture,
 		{
 			0,
@@ -664,7 +663,7 @@ void Projectile::Render(Texture2D texture) const noexcept
 		WHITE);
 }
 
-Wall::Wall(Vector2 pos, int rad)
+Wall::Wall(Vector2 pos, float rad)
 	: position(pos)
 	, radius(rad)
 	, active(true)
@@ -691,7 +690,7 @@ void Wall::Render(Texture2D texture) const noexcept
 		WHITE);
 
 
-	DrawText(TextFormat("%i", health), position.x-21, position.y+10, 40, RED);
+	DrawText(TextFormat("%i", health), static_cast<int>(position.x- 21), static_cast<int>(position.y + 10), 40, RED);
 	
 }
 
@@ -709,8 +708,6 @@ void Wall::Update() noexcept
 
 void Alien::Update() noexcept
 {
-	int window_width = GetScreenWidth(); 
-
 	if (moveRight)
 	{
 		position.x += speed; 
@@ -735,12 +732,7 @@ void Alien::Update() noexcept
 
 void Alien::Render(Texture2D texture) const noexcept
 {
-	//DrawRectangle((int)position.x - 25, (int)position.y, 30, 30, RED);
-	//DrawCircle((int)position.x, (int)position.y, radius, GREEN);
-	
-	
-
-	DrawTexturePro(texture,
+		DrawTexturePro(texture,
 		{
 			0,
 			0,
@@ -769,18 +761,18 @@ void Star::Update(float starOffset) noexcept
 
 void Star::Render() const noexcept
 {
-	DrawCircle((int)position.x, (int)position.y, size, color);
+	DrawCircle(static_cast<int>(position.x), static_cast<int>(position.y), size, color);
 }
 
 Background::Background(int starAmount) {
 	for (int i = 0; i < starAmount; i++) {
 		Star newStar;
-		newStar.initPosition.x = GetRandomValue(-150, GetScreenWidth() + 150);
-		newStar.initPosition.y = GetRandomValue(0, GetScreenHeight());
+		newStar.initPosition.x = static_cast<float>(GetRandomValue(-150, GetScreenWidth() + 150));
+		newStar.initPosition.y = static_cast<float>(GetRandomValue(0, GetScreenHeight()));
 
 		//random color?
 		newStar.color = SKYBLUE;
-		newStar.size = GetRandomValue(1, 4) / 2;
+		newStar.size = static_cast<float>(GetRandomValue(1, 4)) / 2.0f;
 		Stars.push_back(newStar);
 	}
 }
