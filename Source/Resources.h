@@ -1,24 +1,37 @@
 #pragma once
-#include "raylib.h"
-#include "vector"
+#include "TextureHandle.h"
+#include <vector>
+#include <memory>
 
-struct Resources 
+struct Resources
 {
-	Resources() = default;
-
-	~Resources();
+	Resources() noexcept(false)
+		: alienTexture("./Assets/Alien.png")
+		, barrierTexture("./Assets/Barrier.png")
+		, laserTexture("./Assets/Laser.png")
+	{
+		shipTextures.push_back(std::make_unique<TextureHandle>("./Assets/Ship1.png"));
+		shipTextures.push_back(std::make_unique<TextureHandle>("./Assets/Ship2.png"));
+		shipTextures.push_back(std::make_unique<TextureHandle>("./Assets/Ship3.png"));
+	}
 
 	Resources(const Resources&) = delete;
 	Resources& operator=(const Resources&) = delete;
+	Resources(Resources&&) = delete;
+	Resources& operator=(Resources&&) = delete;
 
-	Resources(Resources&& other) noexcept;
-	Resources& operator=(Resources&& other) noexcept;
+	const Texture2D& getShipTexture(int index) const
+	{
+		return shipTextures.at(index)->get();
+	}
 
-	void Load();
+	const Texture2D& getAlienTexture() const noexcept { return alienTexture.get(); }
+	const Texture2D& getBarrierTexture() const noexcept { return barrierTexture.get(); }
+	const Texture2D& getLaserTexture() const noexcept { return laserTexture.get(); }
 
-	std::vector<Texture2D> shipTextures;
-	Texture2D alienTexture{};
-	Texture2D barrierTexture{};
-	Texture2D laserTexture{};
-	bool isLoaded = false;
+private:
+	TextureHandle alienTexture;
+	TextureHandle barrierTexture;
+	TextureHandle laserTexture;
+	std::vector<std::unique_ptr<TextureHandle>> shipTextures;
 };

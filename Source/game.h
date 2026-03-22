@@ -1,5 +1,7 @@
 #pragma once
-#include "raylib.h"
+
+#include "RaylibWrapper.h"
+
 #include <vector>
 #include "Resources.h"
 #include <string>
@@ -50,8 +52,8 @@ struct Player
 	static constexpr int MAX_TEXTURE_INDEX = 2;
 
 	Player() = default;
-	explicit Player(int screenWidth);
-	void Render(const std::vector<Texture2D>& textures) const noexcept;
+	explicit Player(int screenWidth) noexcept;
+	void Render(const Texture2D& texture) const noexcept;
 	void Update() noexcept;
 
 	bool IsAlive() const noexcept { return lives > 0; }
@@ -60,6 +62,7 @@ struct Player
 	float GetX() const noexcept { return x_pos; }
 	float GetBaseHeight() const noexcept { return player_base_height; }
 	float GetRadius() const noexcept { return radius; }
+	int GetActiveTexture() const noexcept { return activeTexture; }
 
 private:
 	float x_pos = 0;
@@ -80,34 +83,32 @@ struct Projectile
 	static constexpr float HALF_LENGTH = 15.0f;
 	static constexpr float SPAWN_OFFSET = 60.0f;
 
-	// INITIALIZE PROJECTILE WHILE DEFINING IF ITS PLAYER OR ENEMY 
 	Vector2 position = { 0,0 };
 	int speed = DEFAULT_SPEED;
 	bool active = true;
 	EntityType type = {};
 
-	// LINE WILL UPDATE WITH POSITION FOR CALCULATIONS
 	Vector2 lineStart = { 0, 0 };
 	Vector2 lineEnd = { 0, 0 };
 
-	Projectile(Vector2 pos, EntityType t, int spd = DEFAULT_SPEED)
+	Projectile(Vector2 pos, EntityType t, int spd = DEFAULT_SPEED) noexcept
 		: position(pos), type(t), speed(spd) {
 	}
 
 	void Update() noexcept;
-	void Render(Texture2D texture) const noexcept;
+	void Render(const Texture2D& texture) const noexcept;
 };
 
-struct Wall 
+struct Wall
 {
 	static constexpr float Y_OFFSET = 250.0f;
 	static constexpr int INITIAL_HEALTH = 50;
-	static constexpr float DEFAULT_RADIUS = 60.0f;	
+	static constexpr float DEFAULT_RADIUS = 60.0f;
 
 	Wall() = default;
-	Wall(Vector2 pos, float rad);
+	Wall(Vector2 pos, float rad) noexcept;
 
-	void Render(Texture2D texture) const noexcept;
+	void Render(const Texture2D& texture) const noexcept;
 	void Update() noexcept;
 
 	void Hit() noexcept { --health; }
@@ -129,11 +130,11 @@ struct Alien
 	static constexpr float DESCENT_AMOUNT = 50.0f;
 	static constexpr int POINTS = 100;
 
-	Alien() = default; 
-	explicit Alien(Vector2 pos) : position(pos) {}
+	Alien() = default;
+	explicit Alien(Vector2 pos) noexcept : position(pos) {}
 
 	void Update() noexcept;
-	void Render(Texture2D texture) const noexcept;
+	void Render(const Texture2D& texture) const noexcept;
 
 	bool IsActive() const noexcept { return active; }
 	void Deactivate() noexcept { active = false; }
@@ -160,7 +161,7 @@ struct Star
 	float size = 0;
 
 	Star() = default;
-	Star(Vector2 initPos, Color col, float sz)
+	Star(Vector2 initPos, Color col, float sz) noexcept
 		: initPosition(initPos)
 		, position(initPos)
 		, color(col)
@@ -185,12 +186,8 @@ struct Background
 
 struct Game
 {
-	Game();
-	Game(const Game&) = delete;
-	Game& operator=(const Game&) = delete;
-
 	void Update();
-	void Render() const noexcept;
+	void Render() const;
 
 private:
 	State gameState = State::STARTSCREEN;
@@ -205,17 +202,15 @@ private:
 
 
 	void Start();
-	void End();
+	void End() noexcept;
 
-	void Continue();
-
-
+	void Continue() noexcept;
 
 	void SpawnAliens();
 
 	bool CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd) const noexcept;
 
-	bool CheckNewHighScore();
+	bool CheckNewHighScore() noexcept;
 
 	void InsertNewHighScore(const std::string& name);
 
@@ -247,8 +242,8 @@ private:
 	void UpdateEndScreen();
 
 	// Gameplay
-	void UpdateEntities();
-	void HandleCollisions();
+	void UpdateEntities() noexcept; 
+	void HandleCollisions() noexcept;
 	void HandlePlayerShooting();
 	void HandleAlienShooting();
 	void RemoveInactiveEntities();

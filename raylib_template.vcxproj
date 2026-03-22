@@ -83,12 +83,16 @@
     <LibraryPath>$(SolutionDir)External\raylib\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)External\raylib\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <IntDir>Build\Intermediate\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir)External\raylib\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)External\raylib\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <IntDir>Build\Intermediate\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -133,6 +137,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +159,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,11 +173,14 @@
   <ItemGroup>
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\Resources.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\DrawScope.h" />
     <ClInclude Include="Source\game.h" />
+    <ClInclude Include="Source\RaylibWrapper.h" />
     <ClInclude Include="Source\Resources.h" />
+    <ClInclude Include="Source\TextureHandle.h" />
+    <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
