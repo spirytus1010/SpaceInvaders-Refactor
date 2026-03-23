@@ -21,19 +21,14 @@ constexpr int FRAMES_PER_ALIEN_SHOT = 59;  // ~1 second at 60 FPS
 constexpr int STAR_COUNT = 600;
 constexpr float BACKGROUND_SCROLL_DIVISOR = 15.0f;
 
+// Alien shooting offset
+constexpr float ALIEN_SHOOT_Y_OFFSET = 40.0f;
+
 enum struct State
 {
 	STARTSCREEN,
 	GAMEPLAY,
 	ENDSCREEN
-};
-
-enum struct EntityType
-{
-	PLAYER,
-	ENEMY,
-	PLAYER_PROJECTILE,
-	ENEMY_PROJECTILE
 };
 
 struct PlayerData
@@ -46,7 +41,7 @@ struct Player
 {
 	static constexpr float DEFAULT_SPEED = 7.0f;
 	static constexpr float BASE_HEIGHT = 70.0f;
-	static constexpr float DEFAULT_RADIUS = 50.0f;
+	static constexpr float RENDER_SIZE = 100.0f;
 	static constexpr int INITIAL_LIVES = 3;
 	static constexpr float ANIMATION_INTERVAL = 0.4f;
 	static constexpr int MAX_TEXTURE_INDEX = 2;
@@ -61,52 +56,63 @@ struct Player
 	int GetLives() const noexcept { return lives; }
 	float GetX() const noexcept { return x_pos; }
 	float GetBaseHeight() const noexcept { return player_base_height; }
-	float GetRadius() const noexcept { return radius; }
 	int GetActiveTexture() const noexcept { return activeTexture; }
+
+	Rectangle Hitbox() const noexcept
+	{
+		return {
+			x_pos - BASE_HEIGHT / 2.0f,
+		    static_cast<float>(GetScreenHeight()) - player_base_height - BASE_HEIGHT / 2.0f,
+			BASE_HEIGHT,
+			BASE_HEIGHT
+		};
+	}
 
 private:
 	float x_pos = 0;
 	float speed = DEFAULT_SPEED;
 	float player_base_height = BASE_HEIGHT;
-	float radius = DEFAULT_RADIUS;
 	int lives = INITIAL_LIVES;
 	int direction = 0;
 	int activeTexture = 0;
 	float timer = 0;
-
-	EntityType type = EntityType::PLAYER;
 };
 
 struct Projectile
 {
 	static constexpr int DEFAULT_SPEED = 15;
-	static constexpr float HALF_LENGTH = 15.0f;
+	static constexpr float HITBOX_WIDTH = 10.0f;
+	static constexpr float HITBOX_HEIGHT = 40.0f;
+	static constexpr float RENDER_SIZE = 50.0f;
 	static constexpr float SPAWN_OFFSET = 60.0f;
 
-	Vector2 position = { 0,0 };
+	Vector2 position = { 0, 0 };
 	int speed = DEFAULT_SPEED;
 	bool active = true;
-	EntityType type = {};
 
-	Vector2 lineStart = { 0, 0 };
-	Vector2 lineEnd = { 0, 0 };
-
-	Projectile(Vector2 pos, EntityType t, int spd = DEFAULT_SPEED) noexcept
-		: position(pos), type(t), speed(spd) {
+	Projectile(Vector2 pos, int spd = DEFAULT_SPEED) noexcept
+		: position(pos), speed(spd) {
 	}
 
 	void Update() noexcept;
 	void Render(const Texture2D& texture) const noexcept;
+
+	Rectangle Hitbox() const noexcept
+	{
+		return { position.x - HITBOX_WIDTH / 2.0f, position.y - HITBOX_HEIGHT / 2.0f, HITBOX_WIDTH, HITBOX_HEIGHT };
+	}
 };
 
 struct Wall
 {
 	static constexpr float Y_OFFSET = 250.0f;
 	static constexpr int INITIAL_HEALTH = 50;
-	static constexpr float DEFAULT_RADIUS = 60.0f;
+	static constexpr float HITBOX_WIDTH = 150.0f;
+	static constexpr float HITBOX_HEIGHT = 80.0f;
+	static constexpr float RENDER_SIZE = 200.0f;
 
 	Wall() = default;
-	Wall(Vector2 pos, float rad) noexcept;
+	explicit Wall(Vector2 pos) noexcept;
 
 	void Render(const Texture2D& texture) const noexcept;
 	void Update() noexcept;
@@ -114,19 +120,24 @@ struct Wall
 	void Hit() noexcept { --health; }
 	bool IsActive() const noexcept { return active; }
 	Vector2 GetPosition() const noexcept { return position; }
-	float GetRadius() const noexcept { return radius; }
+
+	Rectangle Hitbox() const noexcept
+	{
+		return { position.x - HITBOX_WIDTH / 2.0f, position.y - HITBOX_HEIGHT / 2.0f, HITBOX_WIDTH, HITBOX_HEIGHT };
+	}
 
 private:
 	Vector2 position = { 0, 0 };
 	bool active = true;
 	int health = INITIAL_HEALTH;
-	float radius = DEFAULT_RADIUS;
 };
 
 struct Alien
 {
 	static constexpr float DEFAULT_SPEED = 2.0f;
-	static constexpr float DEFAULT_RADIUS = 30.0f;
+	static constexpr float HITBOX_WIDTH = 80.0f;
+	static constexpr float HITBOX_HEIGHT = 60.0f;
+	static constexpr float RENDER_SIZE = 100.0f;
 	static constexpr float DESCENT_AMOUNT = 50.0f;
 	static constexpr int POINTS = 100;
 
@@ -139,16 +150,16 @@ struct Alien
 	bool IsActive() const noexcept { return active; }
 	void Deactivate() noexcept { active = false; }
 	Vector2 GetPosition() const noexcept { return position; }
-	float GetRadius() const noexcept { return radius; }
+
+	Rectangle Hitbox() const noexcept
+	{
+		return { position.x - HITBOX_WIDTH / 2.0f, position.y - HITBOX_HEIGHT / 2.0f, HITBOX_WIDTH, HITBOX_HEIGHT };
+	}
 
 private:
 	Vector2 position = { 0, 0 };
-	float radius = DEFAULT_RADIUS;
 	bool active = true;
 	bool moveRight = true;
-
-	EntityType type = EntityType::ENEMY;
-
 	float speed = DEFAULT_SPEED;
 };
 
@@ -196,10 +207,9 @@ private:
 
 	int wallCount = 5;
 
-	float shootTimer = 0;
+	int shootTimer = 0;
 
 	bool newHighScore = false;
-
 
 	void Start();
 	void End() noexcept;
@@ -207,8 +217,6 @@ private:
 	void Continue() noexcept;
 
 	void SpawnAliens();
-
-	bool CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd) const noexcept;
 
 	bool CheckNewHighScore() noexcept;
 
@@ -219,7 +227,8 @@ private:
 
 	Player player;
 
-	std::vector<Projectile> Projectiles;
+	std::vector<Projectile> playerProjectiles;
+	std::vector<Projectile> enemyProjectiles;
 
 	std::vector<Wall> Walls;
 
@@ -242,7 +251,7 @@ private:
 	void UpdateEndScreen();
 
 	// Gameplay
-	void UpdateEntities() noexcept; 
+	void UpdateEntities() noexcept;
 	void HandleCollisions() noexcept;
 	void HandlePlayerShooting();
 	void HandleAlienShooting();
