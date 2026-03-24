@@ -9,9 +9,7 @@ int main()
 {
 	try
 	{
-		constexpr int screenWidth = 1920;
-		constexpr int screenHeight = 1080;
-		Window window(screenWidth, screenHeight, "SPACE INVADERS");
+		Window window(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
 
 		Game game;
 

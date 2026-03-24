@@ -24,6 +24,11 @@ constexpr float BACKGROUND_SCROLL_DIVISOR = 15.0f;
 // Alien shooting offset
 constexpr float ALIEN_SHOOT_Y_OFFSET = 40.0f;
 
+constexpr int SCREEN_WIDTH = 1920;
+constexpr int SCREEN_HEIGHT = 1080;
+constexpr char const* WINDOW_TITLE = "SPACE INVADERS";
+
+
 enum struct State
 {
 	STARTSCREEN,
