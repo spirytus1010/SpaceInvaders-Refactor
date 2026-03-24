@@ -46,7 +46,6 @@ struct Player
 	static constexpr float ANIMATION_INTERVAL = 0.4f;
 	static constexpr int MAX_TEXTURE_INDEX = 2;
 
-	Player() = default;
 	explicit Player(int screenWidth) noexcept;
 	void Render(const Texture2D& texture) const noexcept;
 	void Update() noexcept;
@@ -111,7 +110,6 @@ struct Wall
 	static constexpr float HITBOX_HEIGHT = 80.0f;
 	static constexpr float RENDER_SIZE = 200.0f;
 
-	Wall() = default;
 	explicit Wall(Vector2 pos) noexcept;
 
 	void Render(const Texture2D& texture) const noexcept;
@@ -141,7 +139,6 @@ struct Alien
 	static constexpr float DESCENT_AMOUNT = 50.0f;
 	static constexpr int POINTS = 100;
 
-	Alien() = default;
 	explicit Alien(Vector2 pos) noexcept : position(pos) {}
 
 	void Update() noexcept;
@@ -171,7 +168,6 @@ struct Star
 	Color color = GRAY;
 	float size = 0;
 
-	Star() = default;
 	Star(Vector2 initPos, Color col, float sz) noexcept
 		: initPosition(initPos)
 		, position(initPos)
@@ -188,7 +184,6 @@ struct Background
 {
 	std::vector<Star> Stars;
 
-	Background() = default;
 	explicit Background(int starAmount);
 
 	void Update(float offset) noexcept;
@@ -225,7 +220,7 @@ private:
 	// Entity Storage and Resources
 	Resources resources;
 
-	Player player;
+	Player player{ GetScreenWidth() };
 
 	std::vector<Projectile> playerProjectiles;
 	std::vector<Projectile> enemyProjectiles;
@@ -236,7 +231,7 @@ private:
 
 	std::vector<PlayerData> Leaderboard = { {"Player 1", 500}, {"Player 2", 400}, {"Player 3", 300}, {"Player 4", 200}, {"Player 5", 100} };
 
-	Background background;
+	Background background{ STAR_COUNT };
 
 	std::string name;
 
